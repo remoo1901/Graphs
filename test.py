@@ -44,55 +44,32 @@ class Graph:
         visited = set()
 
         while len(queue) > 0:
-            current_vertex = queue.pop(0)
+            curr_vertex = queue.pop(0)
 
-            if current_vertex not in visited:
-                print(current_vertex)
+            if curr_vertex not in visited:
+                print(curr_vertex)
 
-                visited.add(current_vertex)
+                visited.add(curr_vertex)
 
-                for neighbor in self.get_neighbors(current_vertex):
-                    queue.append(neighbor)
+                for x in self.get_neighbors(curr_vertex):
+                    queue.append(x)
+
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        stack = []
-        stack.append(starting_vertex)
+        pass  # TODO
 
-        visited = set()
-
-        while len(stack) > 0:
-            current_vertex = stack.pop()
-
-            if current_vertex not in visited:
-                print(current_vertex)
-
-                visited.add(current_vertex)
-
-                for neighbor in self.get_neighbors(current_vertex):
-                    stack.append(neighbor)
-
-        print("===============")
-
-    def dft_recursive(self, starting_vertex, visited=set()):
+    def dft_recursive(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-
-        if starting_vertex not in visited:
-            visited.add(starting_vertex)
-            print(starting_vertex)
-
-            for neighbor in self.get_neighbors(starting_vertex):
-                self.dft_recursive(neighbor)
-
-         print("===============")
+        pass  # TODO
 
     def bfs(self, starting_vertex, destination_vertex):
         """
