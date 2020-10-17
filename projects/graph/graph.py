@@ -92,15 +92,49 @@ class Graph:
             for neighbor in self.get_neighbors(starting_vertex):
                 self.dft_recursive(neighbor)
 
-         print("===============")
+        print("====")
 
-    def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
-        pass  # TODO
+   # this algorithm does BFT until we find the goal vertex, and returns an array of vertex IDs that are part of the path
+    def bfs(self, starting_vertex_id, target_vertex_id):
+        # Create an empty queue and Add a PATH TO starting vertex
+        # I.e add array [1] to the queue
+        queue = [[starting_vertex_id]]
+
+        # create visited set (its empty for now)
+        visited = set()
+        # while queue is not empty:
+        while len(queue) > 0:
+
+            # dequeue the current PATH from the queue
+            current_path = queue.pop(0)
+
+            # get the current vertex to analyze from the path
+            # use the vertex at the END of the path array
+            current_vertex = current_path[-1]
+
+            # if vertex not visited:
+            if current_vertex not in visited:
+
+                # add vertex to visited list
+                visited.add(current_vertex)
+
+                # CHECK IF CURRENT VERTEX IS THE TARGET VERTEX
+                if current_vertex == target_vertex_id:
+                    return current_path
+                    # we found our vertex, and the path to it
+                    # return the PATH
+                # for each neighbor of current vertex
+                    # Add the path to that neighbor, to the queue
+
+                for neighbor in self.get_neighbors(current_vertex):
+                    # COPY THE CURRENT PATH
+                    current_path_copy = list(current_path)
+                    # add neighbor to new path
+                    current_path_copy.append(neighbor)
+                    # add the whole path to the Queue
+                    queue.append(current_path_copy)
+
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -108,7 +142,26 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = [[starting_vertex]]
+
+        visited = set()
+
+        while len(stack) > 0:
+            current_path = stack.pop()
+
+            current_vertex = current_path[-1]
+
+            if current_vertex not in visited:
+                visited.add(current_vertex)
+
+                if current_vertex == destination_vertex:
+                    return current_path
+
+                for neighbor in self.get_neighbors(current_vertex):
+                    current_path_copy = list(current_path)
+                    current_path_copy.append(neighbor)
+                    stack.append(current_path_copy)
+        return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
