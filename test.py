@@ -1,125 +1,135 @@
-class Graph:
-    def __init__(self):
-        self.vertices = {}
-    
-    def add_vertex(self, vertex_id):
-        self.vertices[vertex_id] = set()
-    
-    def add_edge(self, v1, v2):
-        if v1 in self.vertices and v2 in self.vertices:
-            self.vertices[v1].add(v2)
-        else: 
-            print("Error vertex not found")
+""" def earliest_ancestor(ancestors, starting_node):
+
+    # Create an empty dictionary
+    lookup = {}
+
+    # loop through our list
+    for pair in ancestors:
+        # If the 2nd index is not in our dictionary
+        if pair[1] not in lookup:
+            # Assign the 2nd index to the first
+            lookup[pair[1]] = [pair[0]]
+        else:
+            # otherwise append it
+            lookup[pair[1]].append(pair[0])
+
+    # Depth first to get to the last generation
+    def recursion(graph, vertex):
+
+        # if the vertex is not in our graph
+        if vertex not in graph:
+            # return a value of 1, along with the vertex
+            return (1, vertex)
+
+        # Create an empty list
+        results = []
+
+        # Recurse through our graph
+        for value in graph[vertex]:
+            results.append(recursion(graph, value))
+
+        # If there is only 1 ancestor
+        if len(results) == 1:
+            return (results[0][0] + 1, results[0][1])
+
+        # If we have more than 1 ancestor, we'll have to compare them
+        if results[0][0] > results[1][0]:
+            return (results[0][0] + 1, results[0][1])
+        elif results[0][0] < results[1][0]:
+            return (results[1][0] + 1, results[1][1])
+        else:
+            # If the age is the same, we have to return the lowest ID
+            if results[0][1] < results[1][1]:
+                return (results[0][0] + 1, results[0][1])
+            else:
+                return (results[1][0] + 1, results[1][1])
+
+    # Grab the earliest ancestor and deal with situations where the one that was picked is the earliest ancestor
+    earliest = recursion(lookup, starting_node)
+    if earliest[0] == 1:
+        return -1
+    else:
+        return earliest[1]
+ """
+
+ """
+Earliest Ancestor
+Write a function that, given the dataset and the ID of an individual in the dataset, 
+returns their earliest known ancestor – the one at the farthest distance from the input individual. 
+If there is more than one ancestor tied for "earliest", return the one with the lowest numeric ID. 
+If the input individual has no parents, the function should return -1.
 ​
-    def get_neighbors(self, vertex_id):
-        return self.vertices[vertex_id]
+ 10
+ /
+1   2   4  11
+ \ /   / \ /
+  3   5   8
+   \ / \   \
+    6   7   9
 ​
-    def bft(self, starting_vertex_id):
-        # Create an empty Queue and add starting vertex to it
-        # This will keep track of all next_to_visit_vertices
-        queue = []
-        queue.append(starting_vertex_id)
-        # Create an empty set to keep track of visited vertices
-        visited = set()
-        # While the queue is not empty
-        while len(queue) > 0:
-            # dequeue a vertex off the queue
-            current_vertex = queue.pop(0)
+ Example input
+  6
 ​
-            # if vertex not in visited vertices
-            if current_vertex not in visited:
-                # Print it 
-                print(current_vertex)
-                # Add the vertex to our visited set
-                visited.add(current_vertex)
-                # Add all neighbors to the queue
-                for neighbor in self.get_neighbors(current_vertex):
-                    queue.append(neighbor)
-            
-​
-    def dft(self, starting_vertex_id):
-        # Create an empty Stack and add starting vertex to it
-        # This will keep track of all next_to_visit_vertices
-        stack = []
-        stack.append(starting_vertex_id)
-        # Create an empty set to keep track of visited vertices
-        visited = set()
-        # While the queue is not empty
-        while len(stack) > 0:
-            # dequeue a vertex off the stack
-            current_vertex = stack.pop()
-​
-            # if vertex not in visited vertices
-            if current_vertex not in visited:
-                # Print it 
-                print(current_vertex)
-                # Add the vertex to our visited set
-                visited.add(current_vertex)
-                # Add all neighbors to the stack
-                for neighbor in self.get_neighbors(current_vertex):
-                    stack.append(neighbor)
-            
-    # this algorithm does BFT until we find the goal vertex, and returns an array of vertex IDs that are part of the path
-    def bfs(self, starting_vertex_id, target_vertex_id):
-        # Create an empty queue and Add a PATH TO starting vertex 
-        # I.e add array [1] to the queue
-        queue = [ [starting_vertex_id] ] 
-        # create visited set (its empty for now)
-        visited = set()
-        # while queue is not empty:
-        while len(queue) > 0:
-            # dequeue the current PATH from the queue
-            current_path = queue.pop(0)
-            # get the current vertex to analyze from the path 
-            # use the vertex at the END of the path array
-            current_vertex = current_path[-1]
-​
-            # if vertex not visited:
-            if current_vertex not in visited:
-                # add vertex to visited list
-                visited.add(current_vertex)
-​
-                # CHECK IF CURRENT VERTEX IS THE TARGET VERTEX
-                if current_vertex == target_vertex_id:
-                    return current_path
-                    # we found our vertex, and the path to it
-                    # return the PATH
-                
-                # for each neighbor of current vertex
-                    # Add the path to that neighbor, to the queue
-                for neighbor in self.get_neighbors(current_vertex):
-                        # COPY THE CURRENT PATH
-                        current_path_copy = list(current_path)
-                        # add neighbor to new path
-                        current_path_copy.append(neighbor)
-                        # add the whole path to the Queue
-                        queue.append(current_path_copy)
-​
-        return None
+  1 3
+  2 3
+  3 6
+  5 6
+  5 7
+  4 5
+  4 8
+  8 9
+  11 8
+  10 1
+Example output
+  10
+"""
 ​
 ​
-our_graph = Graph()
+def earliest_ancestor(ancestors, starting_node):
+    # Turn the ancestors list into an adjacency list
+    adjacency_list = {}
 ​
-our_graph.add_vertex(1)
-our_graph.add_vertex(2)
-our_graph.add_vertex(3)
-our_graph.add_vertex(4)
-our_graph.add_vertex(5)
-our_graph.add_vertex(6)
-our_graph.add_vertex(7)
-our_graph.add_edge(1,2)
-our_graph.add_edge(2,3)
-our_graph.add_edge(2,4)
-our_graph.add_edge(3,5)
-our_graph.add_edge(5,3)
-our_graph.add_edge(4,6)
-our_graph.add_edge(4,7)
-our_graph.add_edge(6,3)
-our_graph.add_edge(7,6)
-our_graph.add_edge(7,1)
+    for ancestor_pair in ancestors:
+        # add both vertices to adjacency_list
+        if ancestor_pair[0] not in adjacency_list:
+            adjacency_list[ancestor_pair[0]] = set()
+        if ancestor_pair[1] not in adjacency_list:
+            adjacency_list[ancestor_pair[1]] = set()
+        # add the edge between the two vertices
+        adjacency_list[ancestor_pair[1]].add(ancestor_pair[0])
 ​
+    print(adjacency_list)
 ​
-print(our_graph.vertices)
-# our_graph.dft(1)
-print(our_graph.bfs(1, 3))
-Shared in
+    # Create a queue
+    queue = [ [starting_node] ]
+    # create a visited set of vertices
+    visited = set()
+​
+    max_path_length = 1
+    current_earliest_ancestor = -1
+​
+    while len(queue) > 0:
+        # dequeue the current path + vertex
+        current_path = queue.pop(0)
+        # get the current vertex out of the path
+        current_vertex = current_path[-1]
+​
+        # if the vertex has not been visited
+        if current_vertex not in visited:
+            # add the vertex to the visited set
+            visited.add(current_vertex)
+​
+            print(current_path)
+            if len(current_path) > max_path_length or len(current_path) >= max_path_length and current_vertex < current_earliest_ancestor:
+                max_path_length = len(current_path)
+                current_earliest_ancestor = current_vertex
+            # explore the neighbors
+            # add the neighbor vertices to the queue (make sure to build the new paths)
+            for neighbor in adjacency_list[current_vertex]:
+                # copy the current path
+                new_path = list(current_path)
+                # add the neighbor to it
+                new_path.append(neighbor)
+                queue.append(new_path)
+​
+    return current_earliest_ancestor
